@@ -20,10 +20,10 @@ jobs:
           cd google-surfer
           VERSION=$(grep "version" pyproject.toml | cut -d'"' -f 2)
           if git show-ref --tags --verify --quiet "refs/tags/${VERSION}"; then
-            echo "Package version ${TAG} already exists."
+            echo "Package version ${VERSION} already exists."
             exit 1
           else
-            echo "Package version ${TAG} does not exist."
+            echo "Package version ${VERSION} does not exist."
           fi
 
   build:
