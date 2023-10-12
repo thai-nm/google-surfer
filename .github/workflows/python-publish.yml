@@ -20,6 +20,7 @@ jobs:
           if [ $? -eq 0 ]; then
               echo "New version $VERSION is permitted."
               echo "test=world" >> "$GITHUB_OUTPUT"
+              echo "Good 1"
               echo "NEW_VERSION=$VERSION" >> "$GITHUB_OUPUT"
               echo "Good"
           else
