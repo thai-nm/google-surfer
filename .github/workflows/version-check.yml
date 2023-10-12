@@ -13,9 +13,8 @@ jobs:
           fetch-depth: 0
       - name: Check package version
         run: |
-          ls -la
-          cd google-surfer
           VERSION=$(grep "version" pyproject.toml | cut -d'"' -f 2)
+          echo $VERSION
           if git show-ref --tags --verify --quiet "refs/tags/${VERSION}"; then
             echo "Package version ${TAG} already exists."
             exit 1
