@@ -16,7 +16,7 @@ jobs:
         id: check_version
         run: |
           VERSION=$(grep "version" pyproject.toml | cut -d'"' -f 2)
-          pip index versions google-surfer | grep -q $VERSION
+          pip index versions google-surfer | grep $VERSION
           if [ $? -eq 0 ]; then
               echo "New version $VERSION is permitted."
               echo "NEW_VERSION=$VERSION" >> $GITHUB_OUPUT
