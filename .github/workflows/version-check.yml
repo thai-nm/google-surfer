@@ -4,35 +4,17 @@ on:
   pull_request:
 
 jobs:
-  tag_check:
+  check_version:
     runs-on: ubuntu-22.04
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
+      - uses: actions/checkout@v3
       - name: Check package version
         run: |
           VERSION=$(grep "version" pyproject.toml | cut -d'"' -f 2)
-          if git show-ref --tags --verify --quiet "refs/tags/${VERSION}"; then
-            echo "Package version ${VERSION} already exists."
-            exit 1
+          pip index versions google-surfer | grep $VERSION
+          if [ $? -eq 0 ]; then
+              echo "New version $VERSION is permitted."
           else
-            echo "Package version ${VERSION} does not exist."
+              echo "Version $VERSION already exists."
+              exit 1
           fi
-  build:
-    runs-on: ubuntu-22.04
-    needs: [tag_check]
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python
-        uses: actions/setup-python@v3
-        with:
-          python-version: "3.9"
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install build
-      - name: Build package
-        run: |
-          python -m build
