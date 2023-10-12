@@ -19,10 +19,7 @@ jobs:
           pip index versions google-surfer | grep $VERSION
           if [ $? -eq 0 ]; then
               echo "New version $VERSION is permitted."
-              echo "test=world" >> "$GITHUB_OUTPUT"
-              echo "Good 1"
-              echo "NEW_VERSION=$VERSION" >> "$GITHUB_OUPUT"
-              echo "Good"
+              echo "NEW_VERSION=$(grep "version" pyproject.toml | cut -d'"' -f 2)" >> $GITHUB_OUPUT
           else
               echo "Version $VERSION already exists."
               exit 1
