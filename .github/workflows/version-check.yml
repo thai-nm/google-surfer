@@ -2,7 +2,6 @@ name: Check Version Tag
 
 on:
   pull_request:
-    types: [opened]
 
 jobs:
   tag_check:
