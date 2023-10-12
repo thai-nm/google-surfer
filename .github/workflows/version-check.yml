@@ -11,7 +11,7 @@ jobs:
       - name: Check package version
         run: |
           VERSION=$(grep "version" pyproject.toml | cut -d'"' -f 2)
-          pip index versions google-surfer | grep -q $VERSION
+          pip index versions google-surfer | grep $VERSION
           if [ $? -eq 0 ]; then
               echo "New version $VERSION is permitted."
           else
