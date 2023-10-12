@@ -24,7 +24,7 @@ jobs:
           fi
   build:
     runs-on: ubuntu-22.04
-    needs: [build]
+    needs: [tag_check]
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python
