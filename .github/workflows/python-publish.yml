@@ -8,49 +8,24 @@ permissions:
   contents: read
 
 jobs:
-  tag_check:
+  version_check:
     runs-on: ubuntu-22.04
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
+      - uses: actions/checkout@v3
       - name: Check package version
         run: |
           VERSION=$(grep "version" pyproject.toml | cut -d'"' -f 2)
-          if git show-ref --tags --verify --quiet "refs/tags/${VERSION}"; then
-            echo "Package version ${VERSION} already exists."
-            exit 1
+          pip index versions google-surfer | grep -q $VERSION
+          if [ $? -eq 0 ]; then
+              echo "New version $VERSION is permitted."
           else
-            echo "Package version ${VERSION} does not exist."
+              echo "Version $VERSION already exists."
+              exit 1
           fi
 
-  build:
+  publish:
     runs-on: ubuntu-22.04
-    needs: [tag_check]
-    steps:
-      - uses: actions/checkout@v3
-      - name: Generate custom version tag
-        id: generate_version_tag
-        run: echo "VERSION_TAG=$(grep "version" pyproject.toml | cut -d'"' -f 2)" >> $GITHUB_OUTPUT
-      - name: Bump version and push tag
-        id: tag_version
-        uses: mathieudutour/github-tag-action@v6.1
-        with:
-          github_token: ${{ secrets.PUBLISH_PYPI_PACKAGE_TOKEN }}
-          custom_tag: ${{ steps.generate_version_tag.output.VERSION_TAG }}
-          tag_prefix: ""
-      - name: Create a GitHub release
-        uses: ncipollo/release-action@v1
-        with:
-          tag: ${{ steps.tag_version.outputs.new_tag }}
-          name: Release ${{ steps.tag_version.outputs.new_tag }}
-          body: ${{ steps.tag_version.outputs.changelog }}
-          token: ${{ secrets.PUBLISH_PYPI_PACKAGE_TOKEN }}
-
-  deploy:
-    runs-on: ubuntu-22.04
-    needs: [build]
+    needs: [version_check]
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python
