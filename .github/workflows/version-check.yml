@@ -14,12 +14,11 @@ jobs:
       - name: Check package version
         run: |
           VERSION=$(grep "version" pyproject.toml | cut -d'"' -f 2)
-          echo $VERSION
           if git show-ref --tags --verify --quiet "refs/tags/${VERSION}"; then
-            echo "Package version ${TAG} already exists."
+            echo "Package version ${VERSION} already exists."
             exit 1
           else
-            echo "Package version ${TAG} does not exist."
+            echo "Package version ${VERSION} does not exist."
           fi
   build:
     runs-on: ubuntu-22.04
@@ -37,4 +36,3 @@ jobs:
       - name: Build package
         run: |
           python -m build
-          ls -la
