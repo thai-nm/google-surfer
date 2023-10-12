@@ -20,6 +20,7 @@ jobs:
           if [ $? -eq 0 ]; then
               echo "New version $VERSION is permitted."
               echo "NEW_VERSION=$VERSION" >> $GITHUB_OUPUT
+              echo "Good $?"
           else
               echo "Version $VERSION already exists."
               exit 1
