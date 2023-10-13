@@ -16,7 +16,9 @@ jobs:
         id: check_version
         run: |
           VERSION=$(grep "version" pyproject.toml | cut -d'"' -f 2)
+          echo "Version: $VERSION"
           pip index versions google-surfer | grep $VERSION
+          echo "Checking version: $VERSION"
           if [ $? -eq 0 ]; then
               echo "Version $VERSION already exists."
               exit 1
