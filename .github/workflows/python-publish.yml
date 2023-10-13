@@ -18,14 +18,9 @@ jobs:
           VERSION=$(grep "version" pyproject.toml | cut -d'"' -f 2)
           echo "Version: $VERSION"
           pip index versions google-surfer | grep $VERSION
-          echo "Checking version: $VERSION"
-          if [ $? -eq 0 ]; then
-              echo "Version $VERSION already exists."
-              exit 1
-          else
-              echo "New version $VERSION is permitted."
-              echo "NEW_VERSION=$VERSION" >> "$GITHUB_OUTPUT"
-          fi
+          echo "Checking version: $VERSION" && echo "Version $VERSION already exists."; exit 1
+          echo "New version $VERSION is permitted."
+          echo "NEW_VERSION=$VERSION" >> "$GITHUB_OUTPUT"
 
   publish:
     runs-on: ubuntu-22.04
