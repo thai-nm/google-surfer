@@ -17,5 +17,4 @@ jobs:
             exit 1
           else
             echo "New version $VERSION is permitted."
-            echo "NEW_VERSION=$VERSION" >> "$GITHUB_OUTPUT"
           fi

@@ -44,8 +44,3 @@ jobs:
         with:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN }}
-      - name: Create a GitHub release
-        uses: ncipollo/release-action@v1
-        with:
-          tag: ${{ steps.check_version.outputs.NEW_VERSION }}
-          name: Release ${{ steps.tag_version.outputs.new_tag }}
